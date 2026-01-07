@@ -44,8 +44,8 @@ if(EXISTS ${PROJECT_SOURCE_DIR}/test)
     # == Uwzględnij pliki frameworku Google Testing Framework (GTF) ==
 
     # Przyjmij, że główny katalog z plikami frameworku GTF znajduje się
-    # dwa katalogi wyżej względem katalogu projektu.
-    set(GTEST_ROOT ../../googletest-master)
+    # jeden katalog wyżej względem katalogu projektu.
+    set(GTEST_ROOT ../googletest-master)
 
     # Dodaj katalogi z plikami nagłówkowymi GTF.
     target_include_directories(${EXEC_TEST} PUBLIC
