@@ -10,6 +10,7 @@ set(SOURCE_FILES
 
 set(SOURCES_FILES_TESTS
         test/test_package.cpp
+        test/test_nodes.cpp
 )
 
 include(SetCommonConfig.cmake)
