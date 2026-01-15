@@ -1,4 +1,5 @@
 #include "../include/package.hpp"
+#include "../include/storage_types.hpp"
 
 std::set<ElementID> Package::_assigned_IDs{};
 std::set<ElementID> Package::_freed_IDs{};
