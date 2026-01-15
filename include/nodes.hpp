@@ -2,6 +2,7 @@
 #define NETSIM_NODES_HPP
 
 #include "package.hpp"
+#include "types.hpp"
 
 class IPackageReceiver {
 public:

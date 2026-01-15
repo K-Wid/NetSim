@@ -1,12 +1,12 @@
-//
-// Created by Matt on 15.01.2026.
-//
-
 #ifndef STORAGE_TYPES_HPP
 #define STORAGE_TYPES_HPP
 
-#include "types.hpp"
 #include "package.hpp"
+
+enum class QueueType {
+    Fifo, Lifo
+};
+
 class IPackageStockpile {
 public:
     using iterator = std::list<Package>::iterator;

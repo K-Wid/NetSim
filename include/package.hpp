@@ -6,9 +6,7 @@
 
 #include "types.hpp"
 
-enum class QueueType {
-    Fifo, Lifo
-};
+
 
 class Package {
 private:
