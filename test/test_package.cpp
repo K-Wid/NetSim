@@ -2,6 +2,7 @@
 #include "gmock/gmock.h"
 
 #include "package.hpp"
+#include "storage_types.hpp"
 
 using ::testing::Property;
 
