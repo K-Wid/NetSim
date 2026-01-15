@@ -1,10 +1,10 @@
-#ifndef NETSIM_PACKAGE_HPP
-#define NETSIM_PACKAGE_HPP
+#ifndef NETSIM_PACKAGE_HXX
+#define NETSIM_PACKAGE_HXX
 
 #include <set>
 #include <list>
 
-#include "types.hpp"
+#include "types.hxx"
 
 class Package {
 private:

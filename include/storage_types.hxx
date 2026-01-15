@@ -1,11 +1,11 @@
-#ifndef STORAGE_TYPES_HPP
-#define STORAGE_TYPES_HPP
+#ifndef STORAGE_TYPES_HXX
+#define STORAGE_TYPES_HXX
 
 #include <set>
 #include <list>
 
-#include "types.hpp"
-#include "package.hpp"
+#include "types.hxx"
+#include "package.hxx"
 
 enum class QueueType {
     Fifo, Lifo
@@ -56,4 +56,4 @@ public:
 };
 
 
-#endif //STORAGE_TYPES_HPP
+#endif //STORAGE_TYPES_HXX

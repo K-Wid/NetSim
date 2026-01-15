@@ -1,5 +1,5 @@
-#include "../include/package.hpp"
-#include "../include/storage_types.hpp"
+#include "../include/package.hxx"
+#include "../include/storage_types.hxx"
 
 Package PackageQueue::pop() {
     switch (_queue_type) {
