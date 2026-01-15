@@ -1,7 +1,7 @@
-#ifndef STORAGE_TYPES_HPP
-#define STORAGE_TYPES_HPP
+#ifndef STORAGE_TYPES_HXX
+#define STORAGE_TYPES_HXX
 
-#include "package.hpp"
+#include "package.hxx"
 
 enum class QueueType {
     Fifo, Lifo
@@ -51,4 +51,4 @@ public:
     ~PackageQueue() override = default;
 };
 
-#endif //STORAGE_TYPES_HPP
+#endif //STORAGE_TYPES_HXX

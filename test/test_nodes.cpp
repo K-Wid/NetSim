@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 
-#include "nodes.hpp"
+#include "nodes.hxx"
 
 using ::testing::Property;

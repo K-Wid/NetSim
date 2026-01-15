@@ -1,8 +1,8 @@
-#ifndef NETSIM_NODES_HPP
-#define NETSIM_NODES_HPP
+#ifndef NETSIM_NODES_HXX
+#define NETSIM_NODES_HXX
 
-#include "package.hpp"
-#include "types.hpp"
+#include "package.hxx"
+#include "types.hxx"
 
 class IPackageReceiver {
 public:
@@ -66,4 +66,4 @@ public:
     ElementID get_id() const override;
 };
 
-#endif //NETSIM_NODES_HPP
+#endif //NETSIM_NODES_HXX
