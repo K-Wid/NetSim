@@ -7,6 +7,10 @@
 #include "types.hpp"
 #include "package.hpp"
 
+enum class QueueType {
+    Fifo, Lifo
+};
+
 class IPackageStockpile {
 public:
     using iterator = std::list<Package>::iterator;
@@ -50,4 +54,6 @@ public:
 
     ~PackageQueue() override = default;
 };
+
+
 #endif //STORAGE_TYPES_HPP

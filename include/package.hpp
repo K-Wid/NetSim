@@ -6,10 +6,6 @@
 
 #include "types.hpp"
 
-enum class QueueType {
-    Fifo, Lifo
-};
-
 class Package {
 private:
     static std::set<ElementID> _assigned_IDs;
