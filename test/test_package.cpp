@@ -6,12 +6,14 @@
 
 using ::testing::Property;
 
-/*
- * Tests have to be run individually, because static lists in class Package
- * are carried onto next tests and cause incorrect results.
- */
+class PackageReset : public Package {
+public:
+    static void reset() { reset_static_fields(); }
+};
 
 TEST(Package_test, default_constructor_IDs) {
+    PackageReset::reset();
+
     Package p1;
     Package p2;
     Package p3;
@@ -23,6 +25,8 @@ TEST(Package_test, default_constructor_IDs) {
 }
 
 TEST(Package_test, default_constructor_IDs_from_freed) {
+    PackageReset::reset();
+
     Package p1;
     Package p2;
     Package p3;
@@ -34,6 +38,8 @@ TEST(Package_test, default_constructor_IDs_from_freed) {
 }
 
 TEST(PackageQueue_test, pop_FIFO) {
+    PackageReset::reset();
+
     Package p1;
     Package p2;
     Package p3;
@@ -51,6 +57,8 @@ TEST(PackageQueue_test, pop_FIFO) {
 }
 
 TEST(PackageQueue_test, pop_LIFO) {
+    PackageReset::reset();
+
     Package p1;
     Package p2;
     Package p3;

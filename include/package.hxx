@@ -23,6 +23,11 @@ public:
     ElementID get_id() const { return _id; }
 
     ~Package();
+protected:
+    /**
+     * Function should be used ONLY at the beginning of each individual test
+     */
+    static void reset_static_fields();
 };
 
 

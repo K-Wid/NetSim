@@ -47,5 +47,8 @@ Package::~Package() {
     _freed_IDs.insert(_id);
 }
 
-
+void Package::reset_static_fields() {
+    _assigned_IDs.clear();
+    _freed_IDs.clear();
+}
 
