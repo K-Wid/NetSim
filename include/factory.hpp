@@ -4,6 +4,7 @@
 
 #ifndef FACTORY_HPP
 #define FACTORY_HPP
+#include <stdexcept>
 #include <types.hpp>
 
 #include "nodes.hpp"
@@ -34,11 +35,26 @@ class NodeCollection
     };
     NodeCollection<Node>::iterator find_by_id(ElementID id)
     {
-        return std::find_if(_nodes.begin(), _nodes.end(), id);
+        auto iter = std::find_if(_nodes.begin(), _nodes.end(), id);
+        if (iter != _nodes.end() || *iter == id)
+        {
+            return iter;
+        }
+        else
+        {
+            throw std::logic_error("Didn't find such node");
+        }
     };
     NodeCollection<Node>::const_iterator find_by_id(ElementID id) const
     {
-        return std::find_if(_nodes.cbegin(), _nodes.cend(), id);
+        auto iter = std::find_if(_nodes.begin(), _nodes.end(), id);
+        if (iter != _nodes.end() || *iter == id)
+        {
+            return iter;
+        }
+        {
+            throw std::logic_error("Didn't find such node");
+        }
     };
 
 
@@ -84,7 +100,7 @@ class Factory
     NodeCollection<Storehouse>::const_iterator storehouse_cend() const {return _storehouses.cend();};
 
     private:
-    void remove_reciever(NodeCollection<Node>& collection, ElementID id);
+    void remove_reciever(Workers& collection, ElementID id);
 
 
     public:
