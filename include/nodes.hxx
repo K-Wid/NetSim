@@ -5,88 +5,6 @@
 #include "package.hxx"
 #include "types.hxx"
 #include "storage_types.hxx"
-//
-// class IPackageReceiver {
-// public:
-//     virtual void receive_package(Package&&) = 0;
-//     virtual ElementID get_id() const = 0;
-//     virtual IPackageStockpile::const_iterator begin() const;
-//     virtual IPackageStockpile::const_iterator cbegin() const;
-//     virtual IPackageStockpile::const_iterator end() const;
-//     virtual IPackageStockpile::const_iterator cend() const;
-//     virtual ~IPackageReceiver() = default;
-// };
-//
-// class ReceiverPreferences {
-// public:
-//     using preferences_t = std::map<IPackageReceiver*, double>;
-//     using const_iterator = preferences_t::const_iterator;
-//
-//     const_iterator begin() const;
-//     const_iterator end() const;
-//     const_iterator cbegin() const;
-//     const_iterator cend() const;
-//
-//     ReceiverPreferences(ProbabilityGenerator probability_generator = default_probability_generator) : _probability_generator(probability_generator) {};
-//     void add_receiver(IPackageReceiver*);
-//     void remove_receiver(IPackageReceiver*);
-//     IPackageReceiver* choose_receiver();
-//     preferences_t& get_preferences() { return _preferences; }
-//
-// private:
-//     preferences_t _preferences;
-//     ProbabilityGenerator _probability_generator;
-// };
-//
-// class PackageSender {
-// public:
-//     PackageSender() = default;
-//     PackageSender(PackageSender&&) = default;
-//     void send_package();
-//     std::optional<Package>& get_sending_buffer() { return _sending_buffer; }
-//
-// protected:
-//     void push_package(Package&&);
-//
-// private:
-//     std::optional<Package> _sending_buffer;
-// };
-//
-// class Ramp : public PackageSender {
-// public:
-//     Ramp(ElementID, TimeOffset);
-//     void deliver_goods(Time);
-//     TimeOffset get_delivery_interval() const;
-//     ElementID get_id() const;
-// };
-//
-// class Worker : public PackageSender, public IPackageReceiver {
-// public:
-//     Worker(ElementID, TimeOffset, std::unique_ptr<IPackageReceiver>);
-//     void do_work(Time);
-//     TimeOffset get_processing_duration() const;
-//     Time get_package_processing_start_time() const;
-//
-//     void receive_package(Package&&) override;
-//     ElementID get_id() const override;
-// private:
-//     std::optional<Package> _current_package;
-// };
-//
-// class Storehouse : public IPackageReceiver {
-// public:
-//     Storehouse(ElementID element_id, std::unique_ptr<IPackageReceiver> receiver /* = std::make_unique<PackageQueue>(QueueType::Fifo) */);
-//
-//     void receive_package(Package&&) override;
-//     IPackageStockpile::const_iterator begin() const override { return _package_receiver->begin(); }
-//     IPackageStockpile::const_iterator cbegin() const override { return _package_receiver->cbegin(); }
-//     IPackageStockpile::const_iterator end() const override { return _package_receiver->end(); }
-//     IPackageStockpile::const_iterator cend() const override { return _package_receiver->cend(); }
-//     ElementID get_id() const override { return _id; }
-// private:
-//     ElementID _id;
-//     std::unique_ptr<IPackageReceiver> _package_receiver;
-// };
 
 enum class ReceiverType {
     Ramp, Worker, Storehouse
@@ -116,6 +34,11 @@ public:
     void remove_receiver(IPackageReceiver*);
     IPackageReceiver* choose_receiver();
     const preferences_t& get_preferences() const { return preferences; }
+
+    const_iterator begin() const { return preferences.begin(); }
+    const_iterator cbegin() const { return preferences.cbegin(); }
+    const_iterator end() const { return preferences.end(); }
+    const_iterator cend() const { return preferences.cend(); }
 private:
     ProbabilityGenerator probability_generator_;
     preferences_t preferences;
@@ -125,9 +48,9 @@ private:
 
 class PackageSender {
 private:
-    ReceiverPreferences receiver_preferences_;
     std::optional<Package> sending_buffer_;
 public:
+    ReceiverPreferences receiver_preferences_;
     PackageSender() = default;
     PackageSender(PackageSender&&) = default;
     void send_package();
@@ -141,7 +64,7 @@ private:
     const ElementID id_;
     std::unique_ptr<IPackageStockpile> stockpile_;
 public:
-    Storehouse(ElementID id, std::unique_ptr<IPackageStockpile> package_stockpile = std::make_unique<PackageQueue>(QueueType::Fifo)) : id_(id), stockpile_(std::move(package_stockpile)) {}
+    Storehouse(ElementID id, std::unique_ptr<IPackageStockpile> package_stockpile = std::make_unique<PackageQueue>(PackageQueueType::FIFO)) : id_(id), stockpile_(std::move(package_stockpile)) {}
 
     // IPackageReceiver
     void receive_package(Package&& package) override { stockpile_->push(std::move(package)); }
@@ -166,7 +89,7 @@ public:
     ElementID get_id() const { return id_; }
 };
 
-class Worker : public PackageSender, public IPackageReceiver {
+class Worker : public IPackageReceiver, public PackageSender {
 private:
     const ElementID id_;
     TimeOffset processing_duration_;
@@ -178,6 +101,14 @@ public:
     void do_work(Time);
     TimeOffset get_processing_duration() const { return processing_duration_; }
     Time get_package_processing_start_time() const { return processing_start_time_; }
+
+    void receive_package(Package&& package) override { package_queue_->push(std::move(package)); }
+    ElementID get_id() const override { return id_; }
+    ReceiverType get_receiver_type() const override { return ReceiverType::Worker; }
+    IPackageStockpile::const_iterator begin() const override { return package_queue_->begin(); }
+    IPackageStockpile::const_iterator cbegin() const override { return package_queue_->cbegin(); }
+    IPackageStockpile::const_iterator end() const override { return package_queue_->end(); }
+    IPackageStockpile::const_iterator cend() const override { return package_queue_->cend(); }
 };
 
 #endif //NETSIM_NODES_HXX
