@@ -6,6 +6,8 @@
 
 #include "types.hxx"
 
+
+
 class Package {
 private:
     static std::set<ElementID> _assigned_IDs;
@@ -15,14 +17,13 @@ private:
 public:
     Package(ElementID id);
     Package();
-    Package(Package&& package);
+    Package(Package&& package) noexcept = default;
 
-    Package& operator=(Package&&);
+    Package& operator=(Package&&) noexcept = default;
     ElementID get_id() const { return _id; }
 
     ~Package();
 };
 
 
-
-#endif //NETSIM_PACKAGE_HPP
+#endif //NETSIM_PACKAGE_HXX

@@ -1,14 +1,10 @@
 #ifndef STORAGE_TYPES_HXX
 #define STORAGE_TYPES_HXX
 
-#include <set>
-#include <list>
-
-#include "types.hxx"
 #include "package.hxx"
 
-enum class QueueType {
-    Fifo, Lifo
+enum class PackageQueueType {
+    FIFO, LIFO
 };
 
 class IPackageStockpile {
@@ -31,18 +27,19 @@ public:
 class IPackageQueue: public IPackageStockpile {
 public:
     virtual Package pop() = 0;
-    virtual QueueType get_queue_type() const = 0;
+    virtual PackageQueueType get_queue_type() const = 0;
+    ~IPackageQueue() override = default;
 };
 
 class PackageQueue: public IPackageQueue {
 private:
     std::list<Package> _queue;
-    QueueType _queue_type;
+    PackageQueueType _queue_type;
 public:
-    PackageQueue(QueueType queue_type) : _queue_type{queue_type} {}
+    PackageQueue(PackageQueueType queue_type) : _queue_type{queue_type} {}
 
     Package pop() override;
-    QueueType get_queue_type() const override { return _queue_type; }
+    PackageQueueType get_queue_type() const override { return _queue_type; }
     void push(Package&&) override;
     bool empty() override { return _queue.empty(); }
     std::size_t size() override { return _queue.size(); }
@@ -54,6 +51,5 @@ public:
 
     ~PackageQueue() override = default;
 };
-
 
 #endif //STORAGE_TYPES_HXX

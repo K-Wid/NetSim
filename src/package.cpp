@@ -29,22 +29,10 @@ Package::Package() {
     _freed_IDs.erase(_id);
 }
 
-Package::Package(Package &&package) {
-    _id = package.get_id();
-    _assigned_IDs.insert(_id);
-    _freed_IDs.erase(_id);
-}
-
-Package& Package::operator=(Package&& package) {
-    _id = package.get_id();
-    _assigned_IDs.insert(_id);
-    _freed_IDs.erase(_id);
-    return *this;
-}
-
 Package::~Package() {
     _assigned_IDs.erase(_id);
     _freed_IDs.insert(_id);
+    if (_assigned_IDs.empty()) {
+        _freed_IDs.clear();
+    }
 }
-
-

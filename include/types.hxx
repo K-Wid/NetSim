@@ -3,6 +3,9 @@
 
 #include <functional>
 #include <list>
+#include <map>
+#include <memory>
+#include <optional>
 
 using ElementID = unsigned int;
 
