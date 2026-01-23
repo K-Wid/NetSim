@@ -2,7 +2,7 @@
 // Created by stasz on 17.01.2026.
 //
 
-#include "factory.hpp"
+#include "factory.hxx"
 
-#include <types.hpp>
+#include <types.hxx>
 

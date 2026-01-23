@@ -1,4 +1,4 @@
-#include "../include/package.hpp"
+#include "../include/package.hxx"
 
 std::set<ElementID> Package::_assigned_IDs{};
 std::set<ElementID> Package::_freed_IDs{};

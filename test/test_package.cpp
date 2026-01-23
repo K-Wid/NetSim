@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 
-#include "package.hpp"
+#include "package.hxx"
 
 using ::testing::Property;
 
