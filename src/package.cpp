@@ -1,4 +1,5 @@
 #include "../include/package.hxx"
+#include "../include/storage_types.hxx"
 
 std::set<ElementID> Package::_assigned_IDs{};
 std::set<ElementID> Package::_freed_IDs{};
@@ -28,43 +29,10 @@ Package::Package() {
     _freed_IDs.erase(_id);
 }
 
-Package::Package(Package &&package) {
-    _id = package.get_id();
-    _assigned_IDs.insert(_id);
-    _freed_IDs.erase(_id);
-}
-
-Package& Package::operator=(Package&& package) {
-    _id = package.get_id();
-    _assigned_IDs.insert(_id);
-    _freed_IDs.erase(_id);
-    return *this;
-}
-
 Package::~Package() {
     _assigned_IDs.erase(_id);
     _freed_IDs.insert(_id);
-}
-
-Package PackageQueue::pop() {
-    switch (_queue_type) {
-        case QueueType::Fifo: {
-            Package package = std::move(_queue.front());
-            _queue.pop_front();
-            return package;
-        }
-        case QueueType::Lifo: {
-            Package package = std::move(_queue.back());
-            _queue.pop_back();
-            return package;
-        }
-        default: {
-            return Package{0};
-        }
+    if (_assigned_IDs.empty()) {
+        _freed_IDs.clear();
     }
 }
-
-void PackageQueue::push(Package&& package) {
-    _queue.push_back(std::move(package));
-}
-

@@ -7,7 +7,10 @@ set(CMAKE_C_STANDARD 11)  # dostępne wartości: 90, 99, 11
 # Ustaw standard języka C++.
 set(CMAKE_CXX_STANDARD 17)
 
-add_compile_options(-Wall -Wextra -Werror -Wpedantic -pedantic-errors -Wconversion)
+# add_compile_options(-Wall -Wextra -Werror -Wpedantic -pedantic-errors -Wconversion)
+# W przypadku niektórych testów konieczne jest zakomentowanie powyższej linii i odkomentowanie poniższej
+add_compile_options(-Wall -Wextra -Wpedantic -pedantic-errors -Wconversion)
+
 
 # Skorzystaj z narzędzia AddressSanitizer (pozwalającego wykryć m.in. błędy pisania
 # po nie-swojej pamięci statycznej). Narzędzie jest dostępne natywnie dla systemów

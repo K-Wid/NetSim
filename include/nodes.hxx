@@ -1,10 +1,10 @@
-#ifndef NETSIM_NODES_HPP
-#define NETSIM_NODES_HPP
+#ifndef NETSIM_NODES_HXX
+#define NETSIM_NODES_HXX
 
 #include "helpers.hxx"
-
 #include "package.hxx"
 #include "types.hxx"
+#include "storage_types.hxx"
 
 enum class ReceiverType {
     Ramp, Worker, Storehouse
@@ -34,6 +34,11 @@ public:
     void remove_receiver(IPackageReceiver*);
     IPackageReceiver* choose_receiver();
     const preferences_t& get_preferences() const { return preferences; }
+
+    const_iterator begin() const { return preferences.begin(); }
+    const_iterator cbegin() const { return preferences.cbegin(); }
+    const_iterator end() const { return preferences.end(); }
+    const_iterator cend() const { return preferences.cend(); }
 private:
     ProbabilityGenerator probability_generator_;
     preferences_t preferences;
@@ -43,9 +48,9 @@ private:
 
 class PackageSender {
 private:
-    ReceiverPreferences receiver_preferences_;
     std::optional<Package> sending_buffer_;
 public:
+    ReceiverPreferences receiver_preferences_;
     PackageSender() = default;
     PackageSender(PackageSender&&) = default;
     void send_package();
@@ -59,7 +64,7 @@ private:
     const ElementID id_;
     std::unique_ptr<IPackageStockpile> stockpile_;
 public:
-    Storehouse(ElementID id, std::unique_ptr<IPackageStockpile> package_stockpile = std::make_unique<PackageQueue>(QueueType::Fifo)) : id_(id), stockpile_(std::move(package_stockpile)) {}
+    Storehouse(ElementID id, std::unique_ptr<IPackageStockpile> package_stockpile = std::make_unique<PackageQueue>(PackageQueueType::FIFO)) : id_(id), stockpile_(std::move(package_stockpile)) {}
 
     // IPackageReceiver
     void receive_package(Package&& package) override { stockpile_->push(std::move(package)); }
@@ -84,7 +89,7 @@ public:
     ElementID get_id() const { return id_; }
 };
 
-class Worker : public PackageSender, public IPackageReceiver {
+class Worker : public IPackageReceiver, public PackageSender {
 private:
     const ElementID id_;
     TimeOffset processing_duration_;
@@ -96,7 +101,14 @@ public:
     void do_work(Time);
     TimeOffset get_processing_duration() const { return processing_duration_; }
     Time get_package_processing_start_time() const { return processing_start_time_; }
+
+    void receive_package(Package&& package) override { package_queue_->push(std::move(package)); }
+    ElementID get_id() const override { return id_; }
+    ReceiverType get_receiver_type() const override { return ReceiverType::Worker; }
+    IPackageStockpile::const_iterator begin() const override { return package_queue_->begin(); }
+    IPackageStockpile::const_iterator cbegin() const override { return package_queue_->cbegin(); }
+    IPackageStockpile::const_iterator end() const override { return package_queue_->end(); }
+    IPackageStockpile::const_iterator cend() const override { return package_queue_->cend(); }
 };
 
-
-#endif //NETSIM_NODES_HPP
+#endif //NETSIM_NODES_HXX
