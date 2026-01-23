@@ -1,10 +1,10 @@
 #ifndef NETSIM_NODES_HPP
 #define NETSIM_NODES_HPP
 
-#include <helpers.hpp>
+#include "helpers.hxx"
 
-#include "package.hpp"
-#include "types.hpp"
+#include "package.hxx"
+#include "types.hxx"
 
 enum class ReceiverType {
     Ramp, Worker, Storehouse

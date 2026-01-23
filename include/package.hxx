@@ -4,7 +4,7 @@
 #include <set>
 #include <list>
 
-#include "types.hpp"
+#include "types.hxx"
 
 enum class QueueType {
     Fifo, Lifo

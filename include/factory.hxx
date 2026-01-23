@@ -5,9 +5,9 @@
 #ifndef FACTORY_HPP
 #define FACTORY_HPP
 #include <stdexcept>
-#include <types.hpp>
+#include "types.hxx"
 
-#include "nodes.hpp"
+#include "nodes.hxx"
 
 template<class Node>
 class NodeCollection
