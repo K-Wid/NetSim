@@ -17,17 +17,12 @@ private:
 public:
     Package(ElementID id);
     Package();
-    Package(Package&& package);
+    Package(Package&& package) noexcept = default;
 
-    Package& operator=(Package&&);
+    Package& operator=(Package&&) noexcept = default;
     ElementID get_id() const { return _id; }
 
     ~Package();
-protected:
-    /**
-     * Function should be used ONLY at the beginning of each individual test
-     */
-    static void reset_static_fields();
 };
 
 
