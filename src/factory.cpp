@@ -42,9 +42,37 @@ void Factory::remove_reciever(Storehouses& collection, ElementID id)
     }
 }
 
+enum class node_color
+{
+    Visited, NotVisited, Verified
+};
+
+bool is_sender_having_reacheable_storehouse(Ramp ramp,std::map<PackageSender*,node_color> Color)
+{
+
+}
 
 bool Factory::is_consistent() const
 {
+    std::map<PackageSender*,node_color> color;
+    for (auto worker: _workers)
+    {
+        color.insert(std::pair<PackageSender*,node_color>(&worker,node_color::NotVisited));
+    }
+    for (auto ramp: _ramps)
+    {
+        color.insert(std::pair<PackageSender*,node_color>(&ramp,node_color::NotVisited));
+    }
+
+    try
+    {
+        for (auto RRamp: _ramps)
+        {
+            is_sender_having_reacheable_storehouse(RRamp, color);
+        }
+    }
+
+
 
 }
 
