@@ -21,3 +21,6 @@ Projekt zaliczeniowy przedmiotu Zaawansowane Programowanie Obiektowe.
  
 #### Węzły sieci | [Plik żródłowy](https://github.com/K-Wid/NetSim/blob/main/UML/Nodes.puml)
 ![Class Diagram](http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/K-Wid/NetSim/master/UML/Nodes.puml)
+ 
+#### Fabryka | [Plik żródłowy](https://github.com/K-Wid/NetSim/blob/main/UML/Factory.puml)
+![Class Diagram](http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/K-Wid/NetSim/master/UML/Factory.puml)
