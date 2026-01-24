@@ -17,4 +17,4 @@ Projekt zaliczeniowy przedmiotu Zaawansowane Programowanie Obiektowe.
 
 ### Poniżej znajdują się diagramy UML poszczególnych etapów programowania
 #### Półprodukty i ich przechowywanie
-![Class Diagram](http://www.plantuml.com/plantuml/proxy?src=https://github.com/K-Wid/NetSim/master/UML/Packages.puml)
+![Class Diagram](http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/K-Wid/NetSim/master/UML/Packages.puml)
