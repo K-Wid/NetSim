@@ -8,6 +8,7 @@ set(SOURCE_FILES
         src/helpers.cpp
         src/storage_types.cpp
         src/nodes.cpp
+        src/factory.cpp
         )
 
 set(SOURCES_FILES_TESTS
