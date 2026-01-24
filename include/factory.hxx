@@ -108,9 +108,9 @@ class Factory
 
     public:
     bool is_consistent() const;
-    void do_deliveries(Time);
+    void do_deliveries(Time time);
     void do_package_passing();
-    void do_work(Time);
+    void do_work(Time time);
 
 
 };
