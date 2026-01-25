@@ -47,9 +47,56 @@ enum class node_color
     Visited, NotVisited, Verified
 };
 
-bool is_sender_having_reacheable_storehouse(Ramp ramp,std::map<PackageSender*,node_color> Color)
+bool is_sender_having_reacheable_storehouse(PackageSender* sender,std::map<PackageSender*,node_color> Color)
 {
+    if (Color[sender] == node_color::Verified)
+    {
+        return true;
+    }
 
+    Color[sender] = node_color::Visited;
+
+    if (sender->receiver_preferences_.get_preferences().empty() )
+    {
+        throw std::logic_error("No  receiver were found");
+    }
+
+    bool is_sender_having_at_least_one_other_receiver_that_is_not_himself = false;
+
+    for (auto Sender: sender->receiver_preferences_)
+    {
+        if (Sender.first->get_receiver_type() == ReceiverType::Storehouse)
+        {
+            is_sender_having_at_least_one_other_receiver_that_is_not_himself = false;
+        }
+        else
+        {
+            IPackageReceiver* receiver_ptr = Sender.first;
+            auto worker_ptr = dynamic_cast<Worker*>(receiver_ptr);
+            auto sendrecv_ptr = dynamic_cast<PackageSender*>(worker_ptr);
+            if (sendrecv_ptr == sender)
+            {
+                break;
+            }
+            is_sender_having_at_least_one_other_receiver_that_is_not_himself = true;
+            if (Color[sendrecv_ptr] ==node_color::NotVisited)
+            {
+                return is_sender_having_reacheable_storehouse(sender, Color);
+            }
+
+        }
+
+    }
+
+    Color[sender] = node_color::Visited;
+    if (is_sender_having_at_least_one_other_receiver_that_is_not_himself)
+    {
+        return true;
+    }
+    else
+    {
+        throw std::logic_error("Issue :((");
+    }
 }
 
 bool Factory::is_consistent() const
@@ -68,9 +115,15 @@ bool Factory::is_consistent() const
     {
         for (auto RRamp: _ramps)
         {
-            is_sender_having_reacheable_storehouse(RRamp, color);
+            is_sender_having_reacheable_storehouse(&RRamp, color);
         }
     }
+    catch (...)
+    {
+        return false;
+    }
+
+    return true;
 
 
 
