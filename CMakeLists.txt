@@ -17,7 +17,7 @@ set(SOURCE_FILES
         src/storage_types.cpp
         src/nodes.cpp
         # Dołożenie niedokończonego pliku skutkuje brakiem możliwości testowania
-        # src/factory.cpp
+        src/factory.cpp
         )
 
 set(EXEC_DEBUG ${PROJECT_ID}__debug)

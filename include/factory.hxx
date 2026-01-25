@@ -9,7 +9,7 @@
 
 #include "nodes.hxx"
 
-template<class Node>
+template<typename Node>
 class NodeCollection
 {
     private:
@@ -20,43 +20,13 @@ class NodeCollection
     using iterator = typename container_t::iterator;
     using const_iterator = typename container_t::const_iterator;
 
-    void add(Node&& node)
-    {
-        _nodes.push_back(std::move(node));
-    };
-    void remove_by_id(ElementID id)
-    {
-        auto iter = std::find_if(_nodes.begin(), _nodes.end(), id);
-        if (iter != _nodes.end() || *iter == id)
-        {
-            _nodes.erase(iter);
-        }
+    void add(Node&& node){_nodes.push_back(std::move(node));};
+    void remove_by_id(ElementID id);
 
-    };
-    NodeCollection<Node>::iterator find_by_id(ElementID id)
-    {
-        auto iter = std::find_if(_nodes.begin(), _nodes.end(), id);
-        if (iter != _nodes.end())
-        {
-            return iter;
-        }
-        else
-        {
-            throw std::logic_error("Didn't find such node");
-        }
-    };
-    NodeCollection<Node>::const_iterator find_by_id(ElementID id) const
-    {
-        auto iter = std::find_if(_nodes.begin(), _nodes.end(), id);
-        if (iter != _nodes.end())
-        {
-            return iter;
-        }
-        else
-        {
-            throw std::logic_error("Didn't find such node");
-        }
-    };
+    iterator find_by_id(ElementID id);
+
+    const_iterator find_by_id(ElementID id) const;
+
 
 
     iterator begin(){return _nodes.begin();};
@@ -65,6 +35,49 @@ class NodeCollection
     const_iterator cend() const {return _nodes.cend();};
 
 };
+
+
+template<typename Node>
+void NodeCollection<Node>::remove_by_id(ElementID id)
+{
+    auto iter = std::find_if(_nodes.begin(), _nodes.end(), id);
+    if (iter != _nodes.end())
+    {
+        _nodes.erase(iter);
+    }
+
+};
+
+template<typename Node>
+typename NodeCollection<Node>::iterator NodeCollection<Node>::find_by_id(ElementID id)
+{
+    auto iter = std::find_if(_nodes.begin(), _nodes.end(), id);
+    if (iter != _nodes.end())
+    {
+        return iter;
+    }
+    else
+    {
+        throw std::logic_error("Didn't find such node");
+    }
+};
+
+template<typename Node>
+typename NodeCollection<Node>::const_iterator NodeCollection<Node>::find_by_id(ElementID id) const
+{
+    auto iter = std::find_if(_nodes.begin(), _nodes.end(), id);
+    if (iter != _nodes.end())
+    {
+        return iter;
+    }
+    else
+    {
+        throw std::logic_error("Didn't find such node");
+    }
+};
+
+
+
 
 
 
@@ -103,15 +116,37 @@ class Factory
     NodeCollection<Storehouse>::const_iterator storehouse_cend() const {return _storehouses.cend();};
 
     private:
-    void remove_reciever(Workers& collection, ElementID id);
-    void remove_reciever(Storehouses& collection, ElementID id);
+    template<typename Node>
+    void remove_reciever(NodeCollection<Node> collection, ElementID id)
+    {
+        collection.remove_by_id(id);
+        for (auto it = _ramps.begin();it != _ramps.end(); it++){
+            for (auto [fst, snd] : it->receiver_preferences_) {
+                if (fst->get_id() == id)
+                {
+                    it->receiver_preferences_.remove_receiver(fst);
+                }
+            }
+        }
+        for (auto it = _workers.begin(); it != _workers.end(); it++){
+            for (auto [fst, snd] : it->receiver_preferences_) {
+                if (fst->get_id() == id)
+                {
+                    it->receiver_preferences_.remove_receiver(fst);
+                }
+            }
+        }
+    };
+    //void remove_reciever(Workers& collection, ElementID id);
+    //void remove_reciever(Storehouses& collection, ElementID id);
 
     public:
-    bool is_consistent() const;
+    bool is_consistent();// const;
     void do_deliveries(Time time);
     void do_package_passing();
     void do_work(Time time);
 
 
 };
+
 #endif //FACTORY_HPP

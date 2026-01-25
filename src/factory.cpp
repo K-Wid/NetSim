@@ -6,23 +6,23 @@
 #include "nodes.hxx"
 #include <types.hxx>
 
-void Factory::remove_reciever(Workers& collection, ElementID id)
+/*void Factory::remove_reciever(Workers& collection, ElementID id)
 {
 ;
-    _workers.remove_by_id(id);
-    for (auto w:_ramps){
-        for (auto [fst, snd] : w.receiver_preferences_) {
+    collection.remove_by_id(id);
+    for (auto it = _ramps.begin();it != _ramps.end(); it++){
+        for (auto [fst, snd] : it->receiver_preferences_) {
             if (fst->get_id() == id)
             {
-                w.receiver_preferences_.remove_receiver(fst);
+                it->receiver_preferences_.remove_receiver(fst);
             }
         }
     }
-    for (auto w:_workers){
-        for (auto [fst, snd] : w.receiver_preferences_) {
+    for (auto it = _workers.begin(); it != _workers.end(); it++){
+        for (auto [fst, snd] : it->receiver_preferences_) {
             if (fst->get_id() == id)
             {
-                w.receiver_preferences_.remove_receiver(fst);
+                it->receiver_preferences_.remove_receiver(fst);
             }
         }
     }
@@ -30,17 +30,17 @@ void Factory::remove_reciever(Workers& collection, ElementID id)
 
 void Factory::remove_reciever(Storehouses& collection, ElementID id)
 {
-    _storehouses.remove_by_id(id);
+    collection.remove_by_id(id);
 
-    for (auto w:_workers){
-        for (auto [fst, snd] : w.receiver_preferences_) {
+    for (auto it = _workers.begin(); it != _workers.end(); it++){
+        for (auto [fst, snd] : it->receiver_preferences_) {
             if (fst->get_id() == id)
             {
-                w.receiver_preferences_.remove_receiver(fst);
+                it->receiver_preferences_.remove_receiver(fst);
             }
         }
     }
-}
+}*/
 
 enum class node_color
 {
@@ -99,7 +99,7 @@ bool is_sender_having_reacheable_storehouse(PackageSender* sender,std::map<Packa
     }
 }
 
-bool Factory::is_consistent() const
+bool Factory::is_consistent() //const
 {
     std::map<PackageSender*,node_color> color;
     for (auto worker: _workers)
@@ -133,31 +133,45 @@ bool Factory::is_consistent() const
 
 void Factory::do_deliveries(Time time)
 {
-    for (auto ramp: _ramps)
+    for (auto it = _ramps.begin();it != _ramps.end(); it++)
+    //for (auto ramp: _ramps)
     {
-        ramp.deliver_goods(time);
+        it->deliver_goods(time);
     }
 }
 
 
 void Factory::do_package_passing()
 {
-    for (auto ramp: _ramps)
+    /*for (auto ramp: _ramps)
     {
         ramp.send_package();
     }
     for (auto worker: _workers)
     {
         worker.send_package();
+    }*/
+    for (auto it = _ramps.begin(); it != _ramps.end(); it++)
+    {
+        it->send_package();
     }
+    for (auto it = _workers.begin(); it != _workers.end(); it++)
+    {
+        it->send_package();
+    }
+
 }
 
 
 void Factory::do_work(Time time)
 {
-    for (auto worker: _workers)
+    /*for (auto worker: _workers)
     {
         worker.do_work(time);
+    }*/
+    for (auto it= _workers.begin(); it != _workers.end(); it++)
+    {
+        it->do_work(time);
     }
 }
 
