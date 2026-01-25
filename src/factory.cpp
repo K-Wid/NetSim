@@ -102,18 +102,18 @@ bool is_sender_having_reacheable_storehouse(PackageSender* sender,std::map<Packa
 bool Factory::is_consistent() //const
 {
     std::map<PackageSender*,node_color> color;
-    for (auto worker: _workers)
+    for (auto& worker: _workers)
     {
         color.insert(std::pair<PackageSender*,node_color>(&worker,node_color::NotVisited));
     }
-    for (auto ramp: _ramps)
+    for (auto& ramp: _ramps)
     {
         color.insert(std::pair<PackageSender*,node_color>(&ramp,node_color::NotVisited));
     }
 
     try
     {
-        for (auto RRamp: _ramps)
+        for (auto& RRamp: _ramps)
         {
             is_sender_having_reacheable_storehouse(&RRamp, color);
         }

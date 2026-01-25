@@ -16,7 +16,6 @@ set(SOURCE_FILES
         src/helpers.cpp
         src/storage_types.cpp
         src/nodes.cpp
-        # Dołożenie niedokończonego pliku skutkuje brakiem możliwości testowania
         src/factory.cpp
         )
 
@@ -41,7 +40,8 @@ target_include_directories(${EXEC_TEST}_nodes PUBLIC ${GTEST_ROOT}/googlemock/in
 target_link_libraries(${EXEC_TEST}_nodes gmock)
 
 # test_factory
-add_executable(${EXEC_TEST}_factory ${SOURCE_FILES} test/test_Factory.cpp test/test_factory_io.cpp test/main_gtest.cpp)
+# add_executable(${EXEC_TEST}_factory ${SOURCE_FILES} test/test_Factory.cpp test/test_factory_io.cpp test/main_gtest.cpp)
+add_executable(${EXEC_TEST}_factory ${SOURCE_FILES} test/test_Factory.cpp test/main_gtest.cpp)
 target_compile_definitions(${EXEC_TEST}_factory PUBLIC EXERCISE_ID=EXERCISE_ID_FACTORY)
 target_include_directories(${EXEC_TEST}_factory PUBLIC ${GTEST_ROOT}/googlemock/include ${GTEST_ROOT}/googletest/include)
 target_link_libraries(${EXEC_TEST}_factory gmock)

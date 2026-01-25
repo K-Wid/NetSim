@@ -40,7 +40,7 @@ class NodeCollection
 template<typename Node>
 void NodeCollection<Node>::remove_by_id(ElementID id)
 {
-    auto iter = std::find_if(_nodes.begin(), _nodes.end(), id);
+    auto iter = std::find_if(_nodes.begin(), _nodes.end(), [id](auto& node){ return node.get_id() == id; });
     if (iter != _nodes.end())
     {
         _nodes.erase(iter);
@@ -51,7 +51,7 @@ void NodeCollection<Node>::remove_by_id(ElementID id)
 template<typename Node>
 typename NodeCollection<Node>::iterator NodeCollection<Node>::find_by_id(ElementID id)
 {
-    auto iter = std::find_if(_nodes.begin(), _nodes.end(), id);
+    auto iter = std::find_if(_nodes.begin(), _nodes.end(), [id](auto& node){ return node.get_id() == id; });
     if (iter != _nodes.end())
     {
         return iter;
@@ -65,7 +65,7 @@ typename NodeCollection<Node>::iterator NodeCollection<Node>::find_by_id(Element
 template<typename Node>
 typename NodeCollection<Node>::const_iterator NodeCollection<Node>::find_by_id(ElementID id) const
 {
-    auto iter = std::find_if(_nodes.begin(), _nodes.end(), id);
+    auto iter = std::find_if(_nodes.cbegin(), _nodes.cend(), [id](const auto& node){ return node.get_id() == id; });
     if (iter != _nodes.end())
     {
         return iter;
