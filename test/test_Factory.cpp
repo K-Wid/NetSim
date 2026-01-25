@@ -11,7 +11,7 @@ using ::std::cout;
 using ::std::endl;
 
 // Segmentation fault
-// Nieskończona rekurencja
+// Nieskończona rekurencja - prawdopodobnie w factory.isconsistent()
 TEST(FactoryTest, IsConsistentCorrect) {
     // R -> W -> S
 
@@ -30,7 +30,7 @@ TEST(FactoryTest, IsConsistentCorrect) {
 }
 
 // Segmentation fault
-// Nieskończona rekurencja
+// Nieskończona rekurencja - prawdopodobnie w factory.isconsistent()
 TEST(FactoryTest, IsConsistentMissingLink1) {
     // R -> W .. S
     //      W -> W
@@ -50,7 +50,7 @@ TEST(FactoryTest, IsConsistentMissingLink1) {
 }
 
 // Segmentation fault
-// Nieskończona rekurencja
+// Nieskończona rekurencja - prawdopodobnie w factory.isconsistent()
 TEST(FactoryTest, IsConsistentMissingLink2) {
     // R -> W1 -> S
     //      W1 -> W2 -> W2
@@ -102,6 +102,7 @@ TEST(FactoryTest, RemoveWorkerNoSuchReceiver) {
 //   Value of: prefs.empty()
 //     Actual: false
 //   Expected: true
+// Ten i następny test nie przechodzą, bo funkcja remove_worker (i remove_ramp i remove_storehouse) nie usuwają odbiorcy z preferencji innych.
 TEST(FactoryTest, RemoveWorkerOnlyOneReceiver) {
 
     Factory factory;

@@ -95,21 +95,21 @@ class Factory
 
     public:
     void add_ramp(Ramp&& ramp) {_ramps.add(std::move(ramp));};
-    void remove_ramp(ElementID id){_ramps.remove_by_id((id));};
+    void remove_ramp(ElementID id);
     NodeCollection<Ramp>::iterator find_ramp_by_id(ElementID id){return _ramps.find_by_id(id);};
     NodeCollection<Ramp>::const_iterator find_ramp_by_id(ElementID id) const{return _ramps.find_by_id(id);};
     NodeCollection<Ramp>::const_iterator ramp_cbegin() const{return _ramps.cbegin();};
     NodeCollection<Ramp>::const_iterator ramp_cend() const{return _ramps.cend();};
 
     void add_worker(Worker&& worker) {_workers.add(std::move(worker));};
-    void remove_worker(ElementID id){_workers.remove_by_id((id));};
+    void remove_worker(ElementID id);
     NodeCollection<Worker>::iterator find_worker_by_id(ElementID id){return _workers.find_by_id((id));};
     NodeCollection<Worker>::const_iterator find_worker_by_id(ElementID id) const{return _workers.find_by_id(id);};
     NodeCollection<Worker>::const_iterator worker_cbegin() const {return _workers.cbegin();};
     NodeCollection<Worker>::const_iterator worker_cend() const {return _workers.cend();};
 
     void add_storehouse(Storehouse&& storehouse) {_storehouses.add(std::move(storehouse));};
-    void remove_storehouse(ElementID id){_storehouses.remove_by_id(id);};
+    void remove_storehouse(ElementID id);
     NodeCollection<Storehouse>::iterator find_storehouse_by_id(ElementID id){return _storehouses.find_by_id(id);};
     NodeCollection<Storehouse>::const_iterator find_storehouse_by_id(ElementID id) const{return _storehouses.find_by_id(id);};
     NodeCollection<Storehouse>::const_iterator storehouse_cbegin() const {return _storehouses.cbegin();};

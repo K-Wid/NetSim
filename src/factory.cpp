@@ -175,3 +175,17 @@ void Factory::do_work(Time time)
     }
 }
 
+void Factory::remove_ramp(ElementID id) {
+    // Usunąć rampę z preferencji pracowników i magazynów
+    _ramps.remove_by_id(id);
+}
+
+void Factory::remove_worker(ElementID id) {
+    // Usunąć pracownika z preferencji ramp i magazynów
+    _workers.remove_by_id(id);
+}
+
+void Factory::remove_storehouse(ElementID id) {
+    // Usunąć magazyn z preferencji ramp i pracowników
+    _storehouses.remove_by_id(id);
+}
