@@ -193,19 +193,22 @@ void Factory::remove_storehouse(ElementID id) {
 
 // ========== Factory IO ==========
 
-ParsedLineData parse_line(std::string& line) {
+ParsedLineData parse_line(std::string line) {
     std::vector<std::string> tokens;
     std::string token;
 
     std::istringstream token_stream(line);
-
     while (std::getline(token_stream, token, ' ')) {
         tokens.push_back(token);
+    }
+    if (tokens.empty()) {
+        throw std::invalid_argument("Unable to parse. Given line doesn't include space.");
     }
 
     ParsedLineData parsed_line;
 
-    std::string& type = tokens.front();
+    std::string type = tokens.front();
+    tokens.erase(tokens.begin());
     if (type == "RAMP") {
         parsed_line.element_type = ElementType::RAMP;
     } else if (type == "WORKER") {
@@ -215,8 +218,20 @@ ParsedLineData parse_line(std::string& line) {
     } else if (type == "LINK") {
         parsed_line.element_type = ElementType::LINK;
     } else {
-        throw std::invalid_argument("Beggining of a parsed line not recognisable. Line : " + line);
+        throw std::invalid_argument("Beggining of a parsed line not recognisable.");
     }
 
+    for (auto& entry : tokens) {
+        std::istringstream pair(entry);
+        std::vector<std::string> pair_tokens;
+        while (std::getline(pair, token, '=')) {
+            pair_tokens.push_back(token);
+        }
+        if (pair_tokens.size() != 2) {
+            throw std::invalid_argument("Incorrect KEY=VALUE format");
+        }
+        parsed_line.parameters[pair_tokens[0]] = pair_tokens[1];
+    }
 
+    return parsed_line;
 }

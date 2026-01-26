@@ -166,6 +166,6 @@ struct ParsedLineData {
     std::map<std::string, std::string> parameters;
 };
 
-ParsedLineData parse_line(std::string& line);
+ParsedLineData parse_line(std::string line);
 
 #endif //FACTORY_HPP
