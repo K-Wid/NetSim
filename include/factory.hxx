@@ -40,7 +40,7 @@ class NodeCollection
 template<typename Node>
 void NodeCollection<Node>::remove_by_id(ElementID id)
 {
-    auto iter = std::find_if(_nodes.begin(), _nodes.end(), id);
+    auto iter = std::find_if(_nodes.begin(), _nodes.end(), [id](auto& node){ return node.get_id() == id; });
     if (iter != _nodes.end())
     {
         _nodes.erase(iter);
@@ -51,7 +51,7 @@ void NodeCollection<Node>::remove_by_id(ElementID id)
 template<typename Node>
 typename NodeCollection<Node>::iterator NodeCollection<Node>::find_by_id(ElementID id)
 {
-    auto iter = std::find_if(_nodes.begin(), _nodes.end(), id);
+    auto iter = std::find_if(_nodes.begin(), _nodes.end(), [id](auto& node){ return node.get_id() == id; });
     if (iter != _nodes.end())
     {
         return iter;
@@ -65,7 +65,7 @@ typename NodeCollection<Node>::iterator NodeCollection<Node>::find_by_id(Element
 template<typename Node>
 typename NodeCollection<Node>::const_iterator NodeCollection<Node>::find_by_id(ElementID id) const
 {
-    auto iter = std::find_if(_nodes.begin(), _nodes.end(), id);
+    auto iter = std::find_if(_nodes.cbegin(), _nodes.cend(), [id](const auto& node){ return node.get_id() == id; });
     if (iter != _nodes.end())
     {
         return iter;
@@ -95,21 +95,21 @@ class Factory
 
     public:
     void add_ramp(Ramp&& ramp) {_ramps.add(std::move(ramp));};
-    void remove_ramp(ElementID id){_ramps.remove_by_id((id));};
+    void remove_ramp(ElementID id);
     NodeCollection<Ramp>::iterator find_ramp_by_id(ElementID id){return _ramps.find_by_id(id);};
     NodeCollection<Ramp>::const_iterator find_ramp_by_id(ElementID id) const{return _ramps.find_by_id(id);};
     NodeCollection<Ramp>::const_iterator ramp_cbegin() const{return _ramps.cbegin();};
     NodeCollection<Ramp>::const_iterator ramp_cend() const{return _ramps.cend();};
 
     void add_worker(Worker&& worker) {_workers.add(std::move(worker));};
-    void remove_worker(ElementID id){_workers.remove_by_id((id));};
+    void remove_worker(ElementID id);//{remove_reciever(_workers, id);}; //tu
     NodeCollection<Worker>::iterator find_worker_by_id(ElementID id){return _workers.find_by_id((id));};
     NodeCollection<Worker>::const_iterator find_worker_by_id(ElementID id) const{return _workers.find_by_id(id);};
     NodeCollection<Worker>::const_iterator worker_cbegin() const {return _workers.cbegin();};
     NodeCollection<Worker>::const_iterator worker_cend() const {return _workers.cend();};
 
     void add_storehouse(Storehouse&& storehouse) {_storehouses.add(std::move(storehouse));};
-    void remove_storehouse(ElementID id){_storehouses.remove_by_id(id);};
+    void remove_storehouse(ElementID id);//{_storehouses.remove_by_id(id);}; //{remove_reciever(_storehouses,id);}; //tu
     NodeCollection<Storehouse>::iterator find_storehouse_by_id(ElementID id){return _storehouses.find_by_id(id);};
     NodeCollection<Storehouse>::const_iterator find_storehouse_by_id(ElementID id) const{return _storehouses.find_by_id(id);};
     NodeCollection<Storehouse>::const_iterator storehouse_cbegin() const {return _storehouses.cbegin();};
@@ -117,28 +117,22 @@ class Factory
 
     private:
     template<typename Node>
-    void remove_reciever(NodeCollection<Node> collection, ElementID id)
+    void remove_reciever(NodeCollection<Node>& collection, ElementID id)
     {
-        collection.remove_by_id(id);
-        for (auto it = _ramps.begin();it != _ramps.end(); it++){
-            for (auto [fst, snd] : it->receiver_preferences_) {
+
+
+        for (auto it = collection.begin();it != collection.end(); it++){
+            for (auto& [fst, snd] : it->receiver_preferences_.get_preferences()) {
                 if (fst->get_id() == id)
                 {
                     it->receiver_preferences_.remove_receiver(fst);
+                    break;
                 }
             }
         }
-        for (auto it = _workers.begin(); it != _workers.end(); it++){
-            for (auto [fst, snd] : it->receiver_preferences_) {
-                if (fst->get_id() == id)
-                {
-                    it->receiver_preferences_.remove_receiver(fst);
-                }
-            }
-        }
+
     };
-    //void remove_reciever(Workers& collection, ElementID id);
-    //void remove_reciever(Storehouses& collection, ElementID id);
+
 
     public:
     bool is_consistent();// const;
