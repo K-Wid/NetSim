@@ -166,6 +166,14 @@ struct ParsedLineData {
     std::map<std::string, std::string> parameters;
 };
 
+// Used for capitalized names - beginnings of lines
+ElementType elementtype_from_string(std::string s);
+
+// Used in load_factory_structure() - uses lowercase shortened versions - used in LINK in input file
+ElementType link_elem_type_from_string(std::string s);
+
 ParsedLineData parse_line(std::string line);
+
+Factory load_factory_structure(std::istream& input_stream);
 
 #endif //FACTORY_HPP
