@@ -4,9 +4,11 @@
 
 #ifndef FACTORY_HPP
 #define FACTORY_HPP
-#include <stdexcept>
-#include "types.hxx"
 
+#include <stdexcept>
+#include <sstream>
+
+#include "types.hxx"
 #include "nodes.hxx"
 
 template<typename Node>
@@ -148,5 +150,22 @@ class Factory
 
 
 };
+
+
+// ========== Factory IO ==========
+
+enum class ElementType {
+    RAMP,
+    WORKER,
+    STOREHOUSE,
+    LINK
+};
+
+struct ParsedLineData {
+    ElementType element_type;
+    std::map<std::string, std::string> parameters;
+};
+
+ParsedLineData parse_line(std::string& line);
 
 #endif //FACTORY_HPP

@@ -189,3 +189,34 @@ void Factory::remove_storehouse(ElementID id) {
     // Usunąć magazyn z preferencji ramp i pracowników
     _storehouses.remove_by_id(id);
 }
+
+
+// ========== Factory IO ==========
+
+ParsedLineData parse_line(std::string& line) {
+    std::vector<std::string> tokens;
+    std::string token;
+
+    std::istringstream token_stream(line);
+
+    while (std::getline(token_stream, token, ' ')) {
+        tokens.push_back(token);
+    }
+
+    ParsedLineData parsed_line;
+
+    std::string& type = tokens.front();
+    if (type == "RAMP") {
+        parsed_line.element_type = ElementType::RAMP;
+    } else if (type == "WORKER") {
+        parsed_line.element_type = ElementType::WORKER;
+    } else if (type == "STOREHOUSE") {
+        parsed_line.element_type = ElementType::STOREHOUSE;
+    } else if (type == "LINK") {
+        parsed_line.element_type = ElementType::LINK;
+    } else {
+        throw std::invalid_argument("Beggining of a parsed line not recognisable. Line : " + line);
+    }
+
+
+}
