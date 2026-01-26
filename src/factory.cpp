@@ -164,20 +164,30 @@ void Factory::do_work(Time time)
 
 void Factory::remove_ramp(ElementID id) {
     // Usunąć rampę z preferencji pracowników i magazynów
+<<<<<<< HEAD
     remove_reciever(_workers,id);
+=======
+>>>>>>> 210696ef876cd6739be09696e5d8321b10860050
     _ramps.remove_by_id(id);
 }
 
 void Factory::remove_worker(ElementID id) {
     // Usunąć pracownika z preferencji ramp i magazynów
+<<<<<<< HEAD
     remove_reciever(_workers,id);
     remove_reciever(_ramps,id);
+=======
+>>>>>>> 210696ef876cd6739be09696e5d8321b10860050
     _workers.remove_by_id(id);
 }
 
 void Factory::remove_storehouse(ElementID id) {
     // Usunąć magazyn z preferencji ramp i pracowników
     _storehouses.remove_by_id(id);
+<<<<<<< HEAD
 
     //_workers.remove_reciever<Worker>(_workers,id);
 }
+=======
+}
+>>>>>>> 210696ef876cd6739be09696e5d8321b10860050
