@@ -1,4 +1,4 @@
-/*
+
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
@@ -252,4 +252,4 @@ TEST(FactoryIOTest, LoadAndSaveTest) {
     ASSERT_LT(first_worker_it, first_storehouse_it);
     ASSERT_LT(first_storehouse_it, first_link_it);
 }
-*/
+
