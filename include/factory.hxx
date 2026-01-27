@@ -172,6 +172,7 @@ ElementType elementtype_from_string(std::string s);
 // Used in load_factory_structure() - uses lowercase shortened versions - used in LINK in input file
 ElementType link_elem_type_from_string(std::string s);
 
+// Used in load_factory_structure()
 ParsedLineData parse_line(std::string line);
 
 Factory load_factory_structure(std::istream& input_stream);
