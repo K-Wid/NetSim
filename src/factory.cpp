@@ -3,6 +3,10 @@
 //
 
 #include "factory.hxx"
+
+#include <iostream>
+#include <ostream>
+
 #include "nodes.hxx"
 #include <types.hxx>
 
@@ -47,7 +51,7 @@ enum class node_color
     Visited, NotVisited, Verified
 };
 
-bool is_sender_having_reacheable_storehouse(PackageSender* sender,std::map<PackageSender*,node_color> Color)
+bool is_sender_having_reacheable_storehouse(const PackageSender* sender,std::map<const PackageSender*,node_color>& Color)
 {
     if (Color[sender] == node_color::Verified)
     {
@@ -63,25 +67,25 @@ bool is_sender_having_reacheable_storehouse(PackageSender* sender,std::map<Packa
 
     bool is_sender_having_at_least_one_other_receiver_that_is_not_himself = false;
 
-    for (auto Sender: sender->receiver_preferences_)
+    for (const auto& Sender: sender->receiver_preferences_.get_preferences())
     {
         if (Sender.first->get_receiver_type() == ReceiverType::Storehouse)
         {
-            is_sender_having_at_least_one_other_receiver_that_is_not_himself = false;
+            is_sender_having_at_least_one_other_receiver_that_is_not_himself = true;
         }
-        else
+        else if (Sender.first->get_receiver_type() == ReceiverType::Worker)
         {
             IPackageReceiver* receiver_ptr = Sender.first;
             auto worker_ptr = dynamic_cast<Worker*>(receiver_ptr);
-            auto sendrecv_ptr = dynamic_cast<PackageSender*>(worker_ptr);
+            const auto sendrecv_ptr = dynamic_cast<PackageSender*>(worker_ptr);
             if (sendrecv_ptr == sender)
             {
                 break;
             }
             is_sender_having_at_least_one_other_receiver_that_is_not_himself = true;
-            if (Color[sendrecv_ptr] ==node_color::NotVisited)
+            if (Color[sendrecv_ptr] == node_color::NotVisited)
             {
-                return is_sender_having_reacheable_storehouse(sender, Color);
+                 return is_sender_having_reacheable_storehouse(sendrecv_ptr, Color);
             }
 
         }
@@ -99,23 +103,24 @@ bool is_sender_having_reacheable_storehouse(PackageSender* sender,std::map<Packa
     }
 }
 
-bool Factory::is_consistent() //const
+bool Factory::is_consistent()  //const
 {
-    std::map<PackageSender*,node_color> color;
-    for (auto& worker: _workers)
+    std::map<const PackageSender*,node_color> color;
+    for ( auto& ramp: _ramps)
     {
-        color.insert(std::pair<PackageSender*,node_color>(&worker,node_color::NotVisited));
+        color.insert(std::pair<const PackageSender*,node_color>(&ramp,node_color::NotVisited));
     }
-    for (auto& ramp: _ramps)
+
+    for ( auto& worker: _workers)
     {
-        color.insert(std::pair<PackageSender*,node_color>(&ramp,node_color::NotVisited));
+        color.insert(std::pair<const PackageSender*,node_color>(&worker,node_color::NotVisited));
     }
 
     try
     {
-        for (auto& RRamp: _ramps)
+        for ( auto& RRamp: _ramps)
         {
-            is_sender_having_reacheable_storehouse(&RRamp, color);
+            is_sender_having_reacheable_storehouse(dynamic_cast<const PackageSender*>(&RRamp), color);
         }
     }
     catch (...)
@@ -164,30 +169,27 @@ void Factory::do_work(Time time)
 
 void Factory::remove_ramp(ElementID id) {
     // Usunąć rampę z preferencji pracowników i magazynów
-<<<<<<< HEAD
+
     remove_reciever(_workers,id);
-=======
->>>>>>> 210696ef876cd6739be09696e5d8321b10860050
+
     _ramps.remove_by_id(id);
 }
 
 void Factory::remove_worker(ElementID id) {
     // Usunąć pracownika z preferencji ramp i magazynów
-<<<<<<< HEAD
+
     remove_reciever(_workers,id);
     remove_reciever(_ramps,id);
-=======
->>>>>>> 210696ef876cd6739be09696e5d8321b10860050
+
     _workers.remove_by_id(id);
 }
 
 void Factory::remove_storehouse(ElementID id) {
     // Usunąć magazyn z preferencji ramp i pracowników
     _storehouses.remove_by_id(id);
-<<<<<<< HEAD
+
 
     //_workers.remove_reciever<Worker>(_workers,id);
 }
-=======
-}
->>>>>>> 210696ef876cd6739be09696e5d8321b10860050
+
+

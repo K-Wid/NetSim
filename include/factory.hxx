@@ -102,22 +102,21 @@ class Factory
     NodeCollection<Ramp>::const_iterator ramp_cend() const{return _ramps.cend();};
 
     void add_worker(Worker&& worker) {_workers.add(std::move(worker));};
-<<<<<<< HEAD
-    void remove_worker(ElementID id);//{remove_reciever(_workers, id);}; //tu
-=======
+
     void remove_worker(ElementID id);
->>>>>>> 210696ef876cd6739be09696e5d8321b10860050
+
+
+
     NodeCollection<Worker>::iterator find_worker_by_id(ElementID id){return _workers.find_by_id((id));};
     NodeCollection<Worker>::const_iterator find_worker_by_id(ElementID id) const{return _workers.find_by_id(id);};
     NodeCollection<Worker>::const_iterator worker_cbegin() const {return _workers.cbegin();};
     NodeCollection<Worker>::const_iterator worker_cend() const {return _workers.cend();};
 
     void add_storehouse(Storehouse&& storehouse) {_storehouses.add(std::move(storehouse));};
-<<<<<<< HEAD
-    void remove_storehouse(ElementID id);//{_storehouses.remove_by_id(id);}; //{remove_reciever(_storehouses,id);}; //tu
-=======
+
     void remove_storehouse(ElementID id);
->>>>>>> 210696ef876cd6739be09696e5d8321b10860050
+
+
     NodeCollection<Storehouse>::iterator find_storehouse_by_id(ElementID id){return _storehouses.find_by_id(id);};
     NodeCollection<Storehouse>::const_iterator find_storehouse_by_id(ElementID id) const{return _storehouses.find_by_id(id);};
     NodeCollection<Storehouse>::const_iterator storehouse_cbegin() const {return _storehouses.cbegin();};
@@ -143,7 +142,7 @@ class Factory
 
 
     public:
-    bool is_consistent();// const;
+    bool is_consistent();
     void do_deliveries(Time time);
     void do_package_passing();
     void do_work(Time time);
