@@ -17,7 +17,7 @@ set(SOURCE_FILES
         src/storage_types.cpp
         src/nodes.cpp
         src/factory.cpp
-        )
+)
 
 set(EXEC_DEBUG ${PROJECT_ID}__debug)
 add_executable(${EXEC_DEBUG} ${SOURCE_FILES} main.cpp)

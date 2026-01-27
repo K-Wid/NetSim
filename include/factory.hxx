@@ -104,14 +104,21 @@ class Factory
     NodeCollection<Ramp>::const_iterator ramp_cend() const{return _ramps.cend();};
 
     void add_worker(Worker&& worker) {_workers.add(std::move(worker));};
+
     void remove_worker(ElementID id);
+
+
+
     NodeCollection<Worker>::iterator find_worker_by_id(ElementID id){return _workers.find_by_id((id));};
     NodeCollection<Worker>::const_iterator find_worker_by_id(ElementID id) const{return _workers.find_by_id(id);};
     NodeCollection<Worker>::const_iterator worker_cbegin() const {return _workers.cbegin();};
     NodeCollection<Worker>::const_iterator worker_cend() const {return _workers.cend();};
 
     void add_storehouse(Storehouse&& storehouse) {_storehouses.add(std::move(storehouse));};
+
     void remove_storehouse(ElementID id);
+
+
     NodeCollection<Storehouse>::iterator find_storehouse_by_id(ElementID id){return _storehouses.find_by_id(id);};
     NodeCollection<Storehouse>::const_iterator find_storehouse_by_id(ElementID id) const{return _storehouses.find_by_id(id);};
     NodeCollection<Storehouse>::const_iterator storehouse_cbegin() const {return _storehouses.cbegin();};
@@ -119,31 +126,25 @@ class Factory
 
     private:
     template<typename Node>
-    void remove_reciever(NodeCollection<Node> collection, ElementID id)
+    void remove_reciever(NodeCollection<Node>& collection, ElementID id)
     {
-        collection.remove_by_id(id);
-        for (auto it = _ramps.begin();it != _ramps.end(); it++){
-            for (auto [fst, snd] : it->receiver_preferences_) {
+
+
+        for (auto it = collection.begin();it != collection.end(); it++){
+            for (auto& [fst, snd] : it->receiver_preferences_.get_preferences()) {
                 if (fst->get_id() == id)
                 {
                     it->receiver_preferences_.remove_receiver(fst);
+                    break;
                 }
             }
         }
-        for (auto it = _workers.begin(); it != _workers.end(); it++){
-            for (auto [fst, snd] : it->receiver_preferences_) {
-                if (fst->get_id() == id)
-                {
-                    it->receiver_preferences_.remove_receiver(fst);
-                }
-            }
-        }
+
     };
-    //void remove_reciever(Workers& collection, ElementID id);
-    //void remove_reciever(Storehouses& collection, ElementID id);
+
 
     public:
-    bool is_consistent();// const;
+    bool is_consistent();
     void do_deliveries(Time time);
     void do_package_passing();
     void do_work(Time time);
