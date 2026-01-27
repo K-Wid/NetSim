@@ -113,6 +113,7 @@ public:
 #if (defined EXERCISE_ID && EXERCISE_ID != EXERCISE_ID_NODES)
     ReceiverType get_receiver_type() const override { return ReceiverType::Worker; }
 #endif
+    IPackageQueue* get_queue() const { return package_queue_.get(); }
     IPackageStockpile::const_iterator begin() const override { return package_queue_->begin(); }
     IPackageStockpile::const_iterator cbegin() const override { return package_queue_->cbegin(); }
     IPackageStockpile::const_iterator end() const override { return package_queue_->end(); }

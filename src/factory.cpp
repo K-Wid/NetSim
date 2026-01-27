@@ -326,3 +326,31 @@ Factory load_factory_structure(std::istream &input_stream) {
 
     return factory;
 }
+
+void save_factory_structure(Factory &factory, std::ostream &output_stream) {
+    output_stream << "; == LOADING RAMPS ==\n\n";
+    for (auto ramp_it = factory.ramp_cbegin(); ramp_it != factory.ramp_cend(); ++ramp_it) {
+        output_stream << "LOADING_RAMP id=" << ramp_it->get_id() << " delivery-interval=" << ramp_it->get_delivery_interval() << '\n';
+    }
+    output_stream << "\n; == WORKERS ==\n\n";
+    for (auto worker_it = factory.worker_cbegin(); worker_it != factory.worker_cend(); ++worker_it) {
+        output_stream << "WORKER id=" << worker_it->get_id() << " processing-time=" << worker_it->get_processing_duration() << " queue-type=" << ((worker_it->get_queue()->get_queue_type() == PackageQueueType::FIFO)? "FIFO" : "LIFO") << '\n';
+    }
+    output_stream << "\n; == STOREHOUSES ==\n\n";
+    for (auto storehouse_it = factory.storehouse_cbegin(); storehouse_it != factory.storehouse_cend(); ++storehouse_it) {
+        output_stream << "STOREHOUSE id=" << storehouse_it->get_id() << '\n';
+    }
+    output_stream << "\n; == LINKS ==\n\n";
+    for (auto ramp_it = factory.ramp_cbegin(); ramp_it != factory.ramp_cend(); ++ramp_it) {
+        for (const auto& [receiver, p] : ramp_it->receiver_preferences_) {
+            output_stream << "LINK src=ramp-" << ramp_it->get_id() << " dest=" << ((receiver->get_receiver_type() == ReceiverType::Worker)? "worker-" : "store-") << receiver->get_id() << '\n';
+        }
+        output_stream << "\n";
+    }
+    for (auto worker_it = factory.worker_cbegin(); worker_it != factory.worker_cend(); ++worker_it) {
+        for (const auto& [receiver, p] : worker_it->receiver_preferences_) {
+            output_stream << "LINK src=worker-" << worker_it->get_id() << " dest=" << ((receiver->get_receiver_type() == ReceiverType::Worker)? "worker-" : "store-") << receiver->get_id() << '\n';
+        }
+        output_stream << "\n";
+    }
+}
