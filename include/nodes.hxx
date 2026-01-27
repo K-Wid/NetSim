@@ -6,6 +6,9 @@
 #include "types.hxx"
 #include "storage_types.hxx"
 
+// Zawiera EXERCISE_ID_NODES
+#include "config.hpp"
+
 enum class ReceiverType {
     Ramp, Worker, Storehouse
 };
@@ -14,8 +17,9 @@ class IPackageReceiver {
 public:
     virtual void receive_package(Package&&) = 0;
     virtual ElementID get_id() const = 0;
+#if (defined EXERCISE_ID && EXERCISE_ID != EXERCISE_ID_NODES)
     virtual ReceiverType get_receiver_type() const = 0;
-
+#endif
     virtual IPackageStockpile::const_iterator begin() const = 0;
     virtual IPackageStockpile::const_iterator cbegin() const = 0;
     virtual IPackageStockpile::const_iterator end() const = 0;
@@ -65,11 +69,13 @@ private:
     std::unique_ptr<IPackageStockpile> stockpile_;
 public:
     Storehouse(ElementID id, std::unique_ptr<IPackageStockpile> package_stockpile = std::make_unique<PackageQueue>(PackageQueueType::FIFO)) : id_(id), stockpile_(std::move(package_stockpile)) {}
-
+    Storehouse(Storehouse&&) = default;
     // IPackageReceiver
     void receive_package(Package&& package) override { stockpile_->push(std::move(package)); }
     ElementID get_id() const override { return id_; }
+#if (defined EXERCISE_ID && EXERCISE_ID != EXERCISE_ID_NODES)
     ReceiverType get_receiver_type() const override { return ReceiverType::Storehouse; }
+#endif
     IPackageStockpile::const_iterator begin() const override { return stockpile_->begin(); }
     IPackageStockpile::const_iterator cbegin() const override { return stockpile_->cbegin(); }
     IPackageStockpile::const_iterator end() const override { return stockpile_->end(); }
@@ -104,7 +110,10 @@ public:
 
     void receive_package(Package&& package) override { package_queue_->push(std::move(package)); }
     ElementID get_id() const override { return id_; }
+#if (defined EXERCISE_ID && EXERCISE_ID != EXERCISE_ID_NODES)
     ReceiverType get_receiver_type() const override { return ReceiverType::Worker; }
+#endif
+    IPackageQueue* get_queue() const { return package_queue_.get(); }
     IPackageStockpile::const_iterator begin() const override { return package_queue_->begin(); }
     IPackageStockpile::const_iterator cbegin() const override { return package_queue_->cbegin(); }
     IPackageStockpile::const_iterator end() const override { return package_queue_->end(); }
