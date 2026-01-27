@@ -1,0 +1,13 @@
+@startuml
+' ==== < CONFIGURATION > ====
+
+hide empty members
+hide <<function>> circle
+
+' ==== END of < CONFIGURATION > ====
+
+class IO <<function>> {
+	load_factory_structure(is: std::istream&)
+	save_factory_structure(factory: Factory&, os: std::ostream&)
+}
+@enduml

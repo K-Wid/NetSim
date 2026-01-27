@@ -13,6 +13,14 @@ using ::testing::ContainerEq;
 using ::std::cout;
 using ::std::endl;
 
+TEST(myfactoryiotest, parse_line) {
+    ParsedLineData parsed_line = parse_line("STOREHOUSE key1=value1 key2=value2");
+    EXPECT_EQ(parsed_line.element_type, ElementType::STOREHOUSE);
+    std::map<std::string, std::string> exp{{"key1", "value1"}, {"key2", "value2"}};
+    EXPECT_EQ(parsed_line.parameters, exp);
+}
+
+
 
 TEST(FactoryIOTest, ParseRamp) {
     std::istringstream iss("LOADING_RAMP id=1 delivery-interval=3");
@@ -24,16 +32,16 @@ TEST(FactoryIOTest, ParseRamp) {
     EXPECT_EQ(3, r.get_delivery_interval());
 }
 
-TEST(FactoryIOTest, ParseWorker) {
-    std::istringstream iss("WORKER id=1 processing-time=2 queue-type=FIFO");
-    auto factory = load_factory_structure(iss);
+ TEST(FactoryIOTest, ParseWorker) {
+     std::istringstream iss("WORKER id=1 processing-time=2 queue-type=FIFO");
+     auto factory = load_factory_structure(iss);
 
-    ASSERT_EQ(std::next(factory.worker_cbegin(), 1), factory.worker_cend());
-    const auto& w = *(factory.worker_cbegin());
-    EXPECT_EQ(1, w.get_id());
-    EXPECT_EQ(2, w.get_processing_duration());
-    EXPECT_EQ(PackageQueueType::FIFO, w.get_queue()->get_queue_type());
-}
+     ASSERT_EQ(std::next(factory.worker_cbegin(), 1), factory.worker_cend());
+     const auto& w = *(factory.worker_cbegin());
+     EXPECT_EQ(1, w.get_id());
+     EXPECT_EQ(2, w.get_processing_duration());
+     EXPECT_EQ(PackageQueueType::FIFO, w.get_queue()->get_queue_type());
+ }
 
 TEST(FactoryIOTest, ParseStorehouse) {
     std::istringstream iss("STOREHOUSE id=1");

@@ -4,9 +4,11 @@
 
 #ifndef FACTORY_HPP
 #define FACTORY_HPP
-#include <stdexcept>
-#include "types.hxx"
 
+#include <stdexcept>
+#include <sstream>
+
+#include "types.hxx"
 #include "nodes.hxx"
 
 template<typename Node>
@@ -149,5 +151,33 @@ class Factory
 
 
 };
+
+
+// ========== Factory IO ==========
+
+enum class ElementType {
+    RAMP,
+    WORKER,
+    STOREHOUSE,
+    LINK
+};
+
+struct ParsedLineData {
+    ElementType element_type;
+    std::map<std::string, std::string> parameters;
+};
+
+// Used for capitalized names - beginnings of lines
+ElementType elementtype_from_string(std::string s);
+
+// Used in load_factory_structure() - uses lowercase shortened versions - used in LINK in input file
+ElementType link_elem_type_from_string(std::string s);
+
+// Used in load_factory_structure()
+ParsedLineData parse_line(std::string line);
+
+Factory load_factory_structure(std::istream& input_stream);
+
+void save_factory_structure(Factory& factory, std::ostream& output_stream);
 
 #endif //FACTORY_HPP
