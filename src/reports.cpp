@@ -139,3 +139,108 @@ void generate_structure_report(const Factory& factory, std::ostream& outputstrea
     }
 
 }
+
+
+void generate_simulation_turn_report(const Factory& factory, std::ostream& outputstream, Time time)
+{
+    
+    outputstream << "=== [ Turn: " << time <<" ] ===" << "\n\n";
+    std::list<ElementID> worker;
+    std::list<ElementID> ramp;
+    std::list<ElementID> storehouse;
+
+
+
+    outputstream << "== WORKERS ==" << "\n\n";
+
+
+    for (auto it = factory.worker_cbegin(); it != factory.worker_cend(); ++it)
+    {
+        outputstream << "WORKER #" << it->get_id()<< std::endl;
+        if (it->get_processing_buffer().has_value())
+        {
+            outputstream << "  " << "PBuffer: #" << it->get_processing_buffer()->get_id()<< " (pt = " << it->get_package_processing_start_time()<< ")" <<std::endl;
+        }
+        else
+        {
+            outputstream << "  " << "PBuffer: (empty)"  <<std::endl;
+        }
+
+        outputstream << "  " << "Queue: ";
+        for (auto It = it->get_queue()->cbegin(); It != it->get_queue()->cend(); ++It)
+        {
+            if (it->get_queue()->size() == 1)
+            {
+                outputstream << "#" << It->get_id() << std::endl;
+            }
+            else
+            {
+                if (It == it->get_queue()->cend())
+                {
+                    outputstream << "#" << It->get_id() <<std::endl;
+                }
+                else
+                {
+                    outputstream << "#" << It->get_id() <<", ";
+                }
+
+            }
+
+        }
+        if (it->get_queue()->size() == 0)
+        {
+            outputstream << "(empty)" << std::endl;
+        }
+
+
+        if (it->get_sending_buffer().has_value())
+        {
+            outputstream << "  " << "SBuffer: #" << it->get_sending_buffer()->get_id() <<std::endl;        }
+        else
+        {
+            outputstream << "  " << "SBuffer: (empty)"  <<std::endl;
+        }
+
+        outputstream << "\n";
+
+    }
+
+
+    outputstream << "\n";
+    outputstream << "== STOREHOUSES ==" << "\n\n";
+
+    for (auto it = factory.storehouse_cbegin(); it != factory.storehouse_cend(); ++it)
+    {
+        outputstream << "STOREHOUSE #" << it->get_id()<< std::endl;
+        std::list<ElementID> stockpile;
+        outputstream << "  " << "Stock: ";
+        for (auto It = it->cbegin(); It != it->cend(); ++It)
+        {
+            stockpile.push_back(It->get_id());
+        }
+        for (auto p: stockpile)
+        {
+            if (stockpile.size() == 1)
+            {
+                outputstream << "#" << p << std::endl;
+            }
+            else
+            {
+                if (p == stockpile.front())
+                {
+                    outputstream << "#" << p <<std::endl;
+                }
+                else
+                {
+                    outputstream << "#" << p <<", ";
+                }
+            }
+
+        }
+        if (stockpile.empty())
+        {
+            outputstream << "(empty)" << std::endl;
+        }
+        outputstream << "\n";
+    }
+}

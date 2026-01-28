@@ -17,6 +17,7 @@ set(SOURCE_FILES
         src/storage_types.cpp
         src/nodes.cpp
         src/factory.cpp
+        src/reports.cpp
 )
 
 set(EXEC_DEBUG ${PROJECT_ID}__debug)
