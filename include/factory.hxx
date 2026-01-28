@@ -180,4 +180,5 @@ Factory load_factory_structure(std::istream& input_stream);
 
 void save_factory_structure(Factory& factory, std::ostream& output_stream);
 
+
 #endif //FACTORY_HPP
