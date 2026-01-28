@@ -1,0 +1,23 @@
+@startuml
+' ==== < CONFIGURATION > ====
+
+hide empty members
+hide <<function>> circle
+
+' ==== END of < CONFIGURATION > ====
+
+package "Report generation"{
+class Reporting <<function>> {
+        generate_structure_report(factory: const Factory& factory, outputstream: std::ostream&)
+        void generate_simulation_turn_report(factory: const Factory&, outputstream: std::ostream&,time: Time);
+
+    }
+}
+
+package "Factory package"{
+class Factory
+}
+
+Reporting--o Factory
+Reporting -[hidden]- Factory
+@enduml
