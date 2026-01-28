@@ -18,6 +18,6 @@ package "Factory package"{
 class Factory
 }
 
-Reporting--o Factory
+Reporting..> Factory
 Reporting -[hidden]- Factory
 @enduml
