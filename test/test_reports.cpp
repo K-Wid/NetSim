@@ -208,6 +208,7 @@ TEST(ReportsTest, TurnReportNoPackages) {
     perform_turn_report_check(factory, t, expected_report_lines);
 }
 
+
 TEST(ReportsTest, TurnReportPackageInProcessingBuffer) {
     // Utwórz fabrykę.
     Factory factory;
@@ -368,3 +369,4 @@ TEST(ReportsTest, TurnReportPackageInStock) {
 
     perform_turn_report_check(factory, t, expected_report_lines);
 }
+

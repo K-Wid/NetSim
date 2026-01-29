@@ -110,6 +110,9 @@ public:
 
     void receive_package(Package&& package) override { package_queue_->push(std::move(package)); }
     ElementID get_id() const override { return id_; }
+    const std::optional<Package>& get_processing_buffer() const{return package_currently_processed;}
+
+
 #if (defined EXERCISE_ID && EXERCISE_ID != EXERCISE_ID_NODES)
     ReceiverType get_receiver_type() const override { return ReceiverType::Worker; }
 #endif

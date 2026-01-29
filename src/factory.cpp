@@ -356,3 +356,5 @@ void save_factory_structure(Factory &factory, std::ostream &output_stream) {
         output_stream << "\n";
     }
 }
+
+//o
