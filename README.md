@@ -27,3 +27,6 @@ Projekt zaliczeniowy przedmiotu Zaawansowane Programowanie Obiektowe.
  
 #### Warstwa odczytu i zapisu danych | [Plik żródłowy](https://github.com/K-Wid/NetSim/blob/main/UML/Factory_IO.puml)
 ![Class Diagram](http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/K-Wid/NetSim/master/UML/Factory_IO.puml)
+
+#### Warstwa prezentacji danych (raporty) | [Plik żródłowy](https://github.com/K-Wid/NetSim/blob/main/UML/Reports.puml)
+![Class Diagram](http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/K-Wid/NetSim/master/UML/Reports.puml)
