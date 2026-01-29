@@ -6,6 +6,7 @@
 #include "helpers.hxx"
 #include "reports.hxx"
 
+
 using ::testing::Return;
 using ::testing::_;
 
@@ -34,4 +35,50 @@ TEST(SimulationTest, Simulate) {
     auto storehouse_it = factory.storehouse_cbegin();
     ASSERT_NE(storehouse_it->cbegin(), storehouse_it->cend());
     EXPECT_EQ(storehouse_it->cbegin()->get_id(), 1);
+}
+
+TEST(MySimulationTurnsTest, SpecificTurnsReport) {
+
+    Factory factory;
+    factory.add_ramp(Ramp(1, 10));
+    factory.add_worker(Worker(1, 1, std::make_unique<PackageQueue>(PackageQueueType::FIFO)));
+    factory.add_storehouse(Storehouse(1));
+
+    ReceiverPreferences prefs;
+
+    Ramp& r = *(factory.find_ramp_by_id(1));
+    r.receiver_preferences_.add_receiver(&(*factory.find_worker_by_id(1)));
+
+    Worker& w = *(factory.find_worker_by_id(1));
+    w.receiver_preferences_.add_receiver(&(*factory.find_storehouse_by_id(1)));
+
+    SpecificTurnsReportNotifier spec_notifier(std::set<Time>{1});
+    simulate(factory, 3, [&spec_notifier](Factory& f, TimeOffset t_offset) {
+        if (spec_notifier.should_generate_report(t_offset)) {
+            generate_structure_report(f, std::cout);
+        }
+    });
+}
+
+TEST(MySimulationTurnsTest, IntervalReport) {
+
+    Factory factory;
+    factory.add_ramp(Ramp(1, 10));
+    factory.add_worker(Worker(1, 1, std::make_unique<PackageQueue>(PackageQueueType::FIFO)));
+    factory.add_storehouse(Storehouse(1));
+
+    ReceiverPreferences prefs;
+
+    Ramp& r = *(factory.find_ramp_by_id(1));
+    r.receiver_preferences_.add_receiver(&(*factory.find_worker_by_id(1)));
+
+    Worker& w = *(factory.find_worker_by_id(1));
+    w.receiver_preferences_.add_receiver(&(*factory.find_storehouse_by_id(1)));
+
+    IntervalReportNotifier spec_notifier(2);
+    simulate(factory, 6, [&spec_notifier](Factory& f, TimeOffset t_offset) {
+        if (spec_notifier.should_generate_report(t_offset)) {
+            generate_simulation_turn_report(f, std::cout, t_offset);
+        }
+    });
 }

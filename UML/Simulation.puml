@@ -1,0 +1,45 @@
+@startuml
+
+' ==== < CONFIGURATION > ====
+
+hide empty members
+hide <<function>> circle
+
+' ==== END of < CONFIGURATION > ====
+
+package "Report Generation" {
+
+	class SpecificTurnsReportNotifier {
+    	+ SpecificTurnsReportNotifier(turns: std::set<Time>)
+    	+ should_generate_report(t: Time) : bool
+	}
+
+	class IntervalReportNotifier {
+	    + IntervalReportNotifier(to: TimeOffset)
+	    + should_generate_report(t: Time) : bool
+	}
+
+}
+
+' ==== < POSITIONING > ====
+
+IntervalReportNotifier -[hidden]- SpecificTurnsReportNotifier 
+
+' ==== END of < POSITIONING > ====
+
+' == END of package "Report Generation"
+
+
+package "Factory Package" {
+
+	class Factory {
+	}
+
+}
+' == END of package "Factory"
+
+class Simulation <<function>> {
+	simulate(f: Factory&, d: TimeOffset, rf: std::function<void (Factory&, Time)>) : void
+}
+Simulation ..> Factory : <<uses>>
+@enduml

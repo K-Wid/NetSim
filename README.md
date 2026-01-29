@@ -30,3 +30,6 @@ Projekt zaliczeniowy przedmiotu Zaawansowane Programowanie Obiektowe.
 
 #### Warstwa prezentacji danych (raporty) | [Plik żródłowy](https://github.com/K-Wid/NetSim/blob/main/UML/Reports.puml)
 ![Class Diagram](http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/K-Wid/NetSim/master/UML/Reports.puml)
+
+#### Symulcja | [Plik żródłowy](https://github.com/K-Wid/NetSim/blob/main/UML/Simulation.puml)
+![Class Diagram](http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/K-Wid/NetSim/master/UML/Simulation.puml)

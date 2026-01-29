@@ -18,6 +18,7 @@ set(SOURCE_FILES
         src/nodes.cpp
         src/factory.cpp
         src/reports.cpp
+        src/simulation.cpp
 )
 
 set(EXEC_DEBUG ${PROJECT_ID}__debug)
